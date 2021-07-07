@@ -14,7 +14,7 @@ frm.addEventListener('submit', (e)=> {
     const lc = search.value;
     console.log(lc)
 
-    fetch('http://localhost:3000/weather?address='+lc).then((response)=> {
+    fetch('/weather?address='+lc).then((response)=> {
     response.json().then((data)=> {
             console.log(data);
             if(data.error)
