@@ -17,7 +17,6 @@ const weather = (long, lat, callback) =>{
            callback(body.message, undefined)
        }
        else{
-        //    console.log(body)
            callback(undefined, body)
        }
        

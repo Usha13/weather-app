@@ -23,8 +23,19 @@ app.use(express.static(publicdir))
 
 
 app.get('',(req, res) => {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+    
+    todaydate = dd + '/' + mm + '/' + yyyy;
+
+    var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    todayday = days[today.getDay()];
+
     res.render('index',{
-        title: 'Weather'
+        'day' : todayday,
+        'date' : todaydate,
     })
  })
 
@@ -37,6 +48,17 @@ app.get('',(req, res) => {
  app.get('/help',(req, res) => {
     res.render('help',{
         title: 'Help'
+    })
+ })
+ app.get('/contact',(req, res) => {
+    res.render('contact',{
+        title: 'contact'
+    })
+ })
+
+ app.get('/photos',(req, res) => {
+    res.render('photos',{
+        title: 'Photos'
     })
  })
 
@@ -55,18 +77,24 @@ app.get('',(req, res) => {
             })
         }
         else{
-            forecast(long, lat , (error2,{weather,main}={})=> {
+            forecast(long, lat , (error2,{weather,main,base,wind}={})=> {
                 if(error2)
                     return res.send({
                         "error": error2
                     })
                 else                    
                     return res.send({
+                       
                         'Search Address' : req.query.address,
                         'Location' : place,
-                        'Weather' : weather[0].main + " | " + weather[0].description ,
+                        'Weathermain' : weather[0].main ,
+                        "wdesc" : weather[0].description ,
                         'Temparature' : main.temp,
-                        'Humidity' : main.humidity
+                        'Humidity' : main.humidity,
+                        "temp_min" : main.temp_min,
+                        "temp_max" : main.temp_max,
+                        "pressure" : main.pressure,
+                        "wind" : wind.speed
                     })
             })
         }

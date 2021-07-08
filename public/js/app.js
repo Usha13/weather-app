@@ -1,33 +1,38 @@
-console.log("js added")
+(function($, document, window){
+	
+	$(document).ready(function(){
 
+		// Cloning main navigation for mobile menu
+		$(".mobile-navigation").append($(".main-navigation .menu").clone());
 
+		// Mobile menu toggle 
+		$(".menu-toggle").click(function(){
+			$(".mobile-navigation").slideToggle();
+		});
 
-let frm = document.querySelector('form');
-let search = document.querySelector('input');
+		var map = $(".map");
+		var latitude = map.data("latitude");
+		var longitude = map.data("longitude");
+		if( map.length ){
+			
+			map.gmap3({
+				map:{
+					options:{
+						center: [latitude,longitude],
+						zoom: 15,
+						scrollwheel: false
+					}
+				},
+				marker:{
+					latLng: [latitude,longitude],
+				}
+			});
+			
+		}
+	});
 
-let er = document.getElementById('error');
-let msg1 = document.getElementById('msg1');
-let msg2 = document.getElementById('msg2');
+	$(window).load(function(){
 
-frm.addEventListener('submit', (e)=> {
-    e.preventDefault();
-    const lc = search.value;
-    console.log(lc)
+	});
 
-    fetch('/weather?address='+lc).then((response)=> {
-    response.json().then((data)=> {
-            console.log(data);
-            if(data.error)
-            {
-                msg1.innerHTML ="";
-                er.innerHTML = data.error
-            }
-            else
-            {
-                er.innerHTML= "";
-                msg1.innerHTML = "Location: "+data.Location+ "<br> Weather: "+data.Weather+ "<br> Temparature: "+data.Temparature+ "<br> Humidity: "+data.Humidity;
-            }
-        })
-    })
-
-})
+})(jQuery, document, window);
